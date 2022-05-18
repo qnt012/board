@@ -1,8 +1,8 @@
-package com.nhnacademy.jdbc.board.student.service.impl;
+package com.nhnacademy.jdbc.board.user.service.impl;
 
-import com.nhnacademy.jdbc.board.student.domain.Student;
-import com.nhnacademy.jdbc.board.student.mapper.StudentMapper;
-import com.nhnacademy.jdbc.board.student.service.StudentService;
+import com.nhnacademy.jdbc.board.user.domain.User;
+import com.nhnacademy.jdbc.board.user.mapper.StudentMapper;
+import com.nhnacademy.jdbc.board.user.service.StudentService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,7 +20,7 @@ public class DefaultStudentService implements StudentService {
         this.studentMapper = studentMapper;
     }
 
-    public Optional<Student> getStudent(long id){
+    public Optional<User> getStudent(long id){
         return studentMapper.selectStudent(id);
     }
 }
