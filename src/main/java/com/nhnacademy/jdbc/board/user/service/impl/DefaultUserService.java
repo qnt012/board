@@ -7,11 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-/**
- * @Author : marco@nhnacademy.com
- * @Date : 17/05/2022
- */
-
 @Service
 public class DefaultUserService implements UserService {
     private final UserMapper userMapper;
@@ -20,7 +15,12 @@ public class DefaultUserService implements UserService {
         this.userMapper = userMapper;
     }
 
-    public Optional<User> getUser(long id){
-        return userMapper.selectUser(id);
+    @Override
+    public Optional<User> login(String id, String password) {
+        Optional<User> found = userMapper.findById(id);
+        if (found.isPresent() && found.get().getUserPassword().equals(password)) {
+            return found;
+        }
+        return Optional.empty();
     }
 }

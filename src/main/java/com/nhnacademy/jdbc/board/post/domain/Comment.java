@@ -1,4 +1,4 @@
-package com.nhnacademy.jdbc.board.post;
+package com.nhnacademy.jdbc.board.post.domain;
 
 public class Comment {
     private final long comment_num;
