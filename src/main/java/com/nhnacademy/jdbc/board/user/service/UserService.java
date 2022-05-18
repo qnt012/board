@@ -8,6 +8,6 @@ import java.util.Optional;
  * @Author : marco@nhnacademy.com
  * @Date : 17/05/2022
  */
-public interface StudentService {
-     Optional<User> getStudent(long id);
+public interface UserService {
+     Optional<User> getUser(long id);
 }
