@@ -6,5 +6,21 @@
 </head>
 <body>
 <a href="/logout">logout</a>
+<table>
+    <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>작성일시</th>
+        <th>댓글개수</th>
+    </tr>
+    <tr th:each="postView : ${postViews}">
+        <td th:text="${postView.postNum}"></td>
+        <td th:text="${postView.title}"></td>
+        <td th:text="${postView.writerId}"></td>
+        <td th:text="${postView.writeTime}"></td>
+        <td th:text="${postView.commentCount}"></td>
+    </tr>
+</table>
 </body>
 </html>

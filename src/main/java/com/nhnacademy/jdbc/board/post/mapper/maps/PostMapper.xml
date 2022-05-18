@@ -4,15 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.nhnacademy.jdbc.board.post.mapper.PostMapper">
-        <select id="selectPost" resultType="com.nhnacademy.jdbc.board.post.domain.Post">
-            select *
-            from posts
-            where id = #{id}
-        </select>
+<!--        <select id="selectPost" resultType="com.nhnacademy.jdbc.board.post.domain.PostView">-->
+<!--            select *-->
+<!--            from posts-->
+<!--            where post_num = #{postNum}-->
+<!--        </select>-->
 
-        <select id="selectPosts" resultType="com.nhnacademy.jdbc.board.post.domain.Post">
-            select *
-            from posts
+        <select id="selectPostViews" resultType="com.nhnacademy.jdbc.board.post.domain.PostView">
+            select post_num, title, user_id, write_time,
+                   (select count(*) from comments C where C.post_num = P.post_num) comment_count
+            from posts P inner join users on writer_num = user_num;
         </select>
 
     <!--    <insert id="insertUser">-->
