@@ -1,11 +1,11 @@
 package com.nhnacademy.jdbc.board.post;
 
 public class Likes {
-    private final long user_num;
-    private final long post_num;
+    private final long userNum;
+    private final long postNum;
 
-    public Likes(long user_num, long post_num) {
-        this.user_num = user_num;
-        this.post_num = post_num;
+    public Likes(long userNum, long postNum) {
+        this.userNum = userNum;
+        this.postNum = postNum;
     }
 }
