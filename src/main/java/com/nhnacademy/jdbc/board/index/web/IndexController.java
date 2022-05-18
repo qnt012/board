@@ -1,8 +1,8 @@
 package com.nhnacademy.jdbc.board.index.web;
 
-import com.nhnacademy.jdbc.board.student.domain.Student;
-import com.nhnacademy.jdbc.board.student.service.StudentService;
-import com.nhnacademy.jdbc.board.student.service.impl.DefaultStudentService;
+import com.nhnacademy.jdbc.board.user.domain.User;
+import com.nhnacademy.jdbc.board.user.service.UserService;
+import com.nhnacademy.jdbc.board.user.service.impl.DefaultUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,17 +14,17 @@ import java.util.Optional;
 @RequestMapping
 @Slf4j
 public class IndexController {
-    private final StudentService studentService;
+    private final UserService userService;
 
-    public IndexController(DefaultStudentService studentService) {
-        this.studentService = studentService;
+    public IndexController(DefaultUserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping(value = {"/","/index.nhn"})
     public String index(){
-        Optional<Student> student = studentService.getStudent(1l);
-        if(student.isPresent()){
-            log.debug("student : {}",student.get());
+        Optional<User> user = userService.getUser(1l);
+        if(user.isPresent()){
+            log.debug("User : {}",user.get());
         }
         return "index/index";
     }
