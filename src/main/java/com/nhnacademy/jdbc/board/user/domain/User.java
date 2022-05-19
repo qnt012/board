@@ -2,19 +2,14 @@ package com.nhnacademy.jdbc.board.user.domain;
 
 import java.io.Serializable;
 import java.util.Objects;
-import lombok.Getter;
+import lombok.Value;
 
-@Getter
+@Value
 public class User implements Serializable{
-    private final int userNum;
-    private final String userId;
-    private final String userPassword;
-
-    public User(int userNum, String userId, String userPassword) {
-        this.userNum = userNum;
-        this.userId = userId;
-        this.userPassword = userPassword;
-    }
+    int userNum;
+    String userId;
+    String userPassword;
+    boolean isAdmin;
 
     @Override
     public String toString() {
@@ -44,6 +39,6 @@ public class User implements Serializable{
     }
 
     public User getUserAuthInfo() {
-        return new User(userNum, userId, null);
+        return new User(userNum, userId, null, isAdmin);
     }
 }

@@ -51,6 +51,7 @@ public class PostController {
         modelMap.put("post", post);
         modelMap.put("comments", postService.viewComments(postNum));
         modelMap.put("isWriter", Objects.equals(user.getUserId(), post.getWriterId()));
+        modelMap.put("isAdmin", user.isAdmin());
         return "postDetailView";
     }
 
