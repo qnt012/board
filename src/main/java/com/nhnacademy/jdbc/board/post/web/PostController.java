@@ -22,10 +22,13 @@ public class PostController {
 
 
     @GetMapping("/postView/{page}")
-    public String getPostView(@PathVariable int page, ModelMap modelMap){
+    public String getPostView(@PathVariable int page, ModelMap modelMap, HttpSession session){
+        User user = (User) session.getAttribute("login");
+
         modelMap.put("postViews", postService.viewPosts(page));
         modelMap.put("page", page);
         modelMap.put("maxPage", postService.getMaxPage());
+        modelMap.put("isAdmin", user.isAdmin());
         return "postView";
     }
 
@@ -84,5 +87,19 @@ public class PostController {
         User user = (User) session.getAttribute("login");
         postService.createComment(postNum, user.getUserNum(), commentContent);
         return "redirect:/postDetail/{postNum}";
+    }
+
+    @GetMapping("/postDeleteList/{page}")
+    public String getPostDeleteList(@PathVariable int page, ModelMap modelMap){
+        modelMap.put("postViews", postService.viewPosts(page));
+        modelMap.put("page", page);
+        modelMap.put("maxPage", postService.getMaxPage());
+        return "postDeleteList";
+    }
+
+    @GetMapping("/postRestore/{postNum}")
+    public String getPostRestore(@PathVariable long postNum) {
+        postService.restorePost(postNum);
+        return "redirect:/postDeleteList/0";
     }
 }

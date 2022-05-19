@@ -56,4 +56,9 @@ public class DefaultPostService implements PostService {
     public void createComment(long postNum, long writerNum, String commentContent) {
         postMapper.insertComment(postNum, writerNum, commentContent);
     }
+
+    @Override
+    public void restorePost(long postNum) {
+        postMapper.updatePostVisibility(postNum, true);
+    }
 }

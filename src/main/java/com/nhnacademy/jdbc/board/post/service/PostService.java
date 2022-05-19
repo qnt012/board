@@ -15,4 +15,5 @@ public interface PostService {
     List<Comment> viewComments(long postNum);
     void deletePost(long postNum);
     void createComment(long postNum, long writerNum, String commentContent);
+    void restorePost(long postNum);
 }

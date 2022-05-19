@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>postView</title>
+    <title>postDeleteList</title>
 </head>
 <body>
-<a href="/logout">logout</a>
-<a href="/postDeleteList/0" th:if="${isAdmin}">삭제목록</a>
+<a href="/postView/0">게시글목록</a>
 <table>
     <tr>
         <th>번호</th>
@@ -15,7 +14,7 @@
         <th>작성일시</th>
         <th>댓글개수</th>
     </tr>
-    <tr th:each="postView : ${postViews}" th:if="${postView.visibility}">
+    <tr th:each="postView : ${postViews}" th:unless="${postView.visibility}">
         <td th:text="${postView.postNum}"></td>
         <td><a th:href="@{|/postDetail/${postView.postNum}|}" th:text="${postView.title}"></a></td>
         <td th:text="${postView.writerId}"></td>
@@ -23,9 +22,5 @@
         <td th:text="${postView.commentCount}"></td>
     </tr>
 </table>
-<a th:href="@{|/postView/${page - 1}|}" th:if="${page} > 0">이전</a>
-<a th:href="@{|/postView/${page + 1}|}" th:if="${page} < ${maxPage}">다음</a>
-<br/>
-<a href="/postInsert">등록</a>
 </body>
 </html>
