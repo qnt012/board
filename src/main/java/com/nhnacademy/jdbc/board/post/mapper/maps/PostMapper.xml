@@ -16,10 +16,10 @@
             from posts P inner join users on writer_num = user_num;
         </select>
 
-    <!--    <insert id="insertUser">-->
-    <!--        insert into JdbcUsers(id, name, created_at)-->
-    <!--        values (#{id}, '${name}', #{createdAt})-->
-    <!--    </insert>-->
+        <insert id="insertPost">
+            insert into posts (board_num, writer_num, title, content, write_time)
+            values(1, #{writerNum}, '${title}', '${content}', now());
+        </insert>
 
     <!--    <update id="updateNameById">-->
     <!--        update JdbcUsers set name='${name}'-->

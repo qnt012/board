@@ -7,6 +7,6 @@
     <select id="findById" resultType="com.nhnacademy.jdbc.board.user.domain.User">
         select *
         from users
-        where user_id = #{id}
+        where user_id = '${id}'
     </select>
 </mapper>

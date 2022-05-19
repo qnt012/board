@@ -19,4 +19,9 @@ public class DefaultPostService implements PostService {
     public List<PostView> viewPosts() {
         return postMapper.selectPostViews();
     }
+
+    @Override
+    public void createPost(long writerNum, String title, String content) {
+        postMapper.insertPost(writerNum, title, content);
+    }
 }

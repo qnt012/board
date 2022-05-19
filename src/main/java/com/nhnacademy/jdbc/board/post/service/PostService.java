@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface PostService {
     List<PostView> viewPosts();
+    void createPost(long writerNum, String title, String content);
 }
