@@ -39,4 +39,10 @@ public class PostController {
         postService.createPost((Integer) session.getAttribute("login"), title, content);
         return "redirect:/postView";
     }
+
+    @GetMapping("/postDetail/{postNum}")
+    public String getPostDetail(@PathVariable long postNum, ModelMap modelMap) {
+        modelMap.put("post", postService.getPost(postNum));
+        return "postDetailView";
+    }
 }

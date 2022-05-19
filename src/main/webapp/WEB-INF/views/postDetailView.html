@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>postDetailView</title>
+</head>
+<body>
+번호 <span th:text="${post.postNum}"></span><br/>
+제목 <span th:text="${post.title}"></span><br/>
+내용 <p th:text="${post.content}"></p>
+작성자 <span th:text="${post.writerId}"></span><br/>
+수정자 <span th:text="${post.modifierId}"></span><br/>
+작성일시 <span th:text="${post.writeTime}"></span><br/>
+수정일시 <span th:text="${post.modifyTime}"></span><br/>
+</body>
+</html>

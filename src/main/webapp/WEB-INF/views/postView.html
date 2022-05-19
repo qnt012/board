@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>postView</title>
 </head>
 <body>
 <a href="/logout">logout</a>
@@ -16,7 +16,7 @@
     </tr>
     <tr th:each="postView : ${postViews}">
         <td th:text="${postView.postNum}"></td>
-        <td th:text="${postView.title}"></td>
+        <td><a th:href="@{|/postDetail/${postView.postNum}|}" th:text="${postView.title}"></a></td>
         <td th:text="${postView.writerId}"></td>
         <td th:text="${postView.writeTime}"></td>
         <td th:text="${postView.commentCount}"></td>

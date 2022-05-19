@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 @Getter
 public class PostView {
     private final long postNum;
-    private String title;
+    private final String title;
     private final String writerId;
     private final Timestamp writeTime;
-    private int commentCount;
+    private final int commentCount;
 
     public PostView(long postNum, String title, String writerId, Timestamp writeTime, int commentCount) {
         this.postNum = postNum;
