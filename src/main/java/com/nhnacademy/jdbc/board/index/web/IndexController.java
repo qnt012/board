@@ -15,14 +15,8 @@ import java.util.Optional;
 @RequestMapping
 @Slf4j
 public class IndexController {
-    private final UserService userService;
-
-    public IndexController(DefaultUserService userService) {
-        this.userService = userService;
-    }
-
     @GetMapping(value = {"/","/index.nhn"})
-    public String index(HttpSession session){
+    public String index(){
         return "index/index";
     }
 }

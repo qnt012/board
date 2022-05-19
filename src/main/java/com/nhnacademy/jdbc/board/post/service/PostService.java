@@ -13,4 +13,5 @@ public interface PostService {
     void modifyPost(long postNum, String title, String content, long modifierNum);
     int getMaxPage();
     List<Comment> viewComments(long postNum);
+    void deletePost(long postNum);
 }

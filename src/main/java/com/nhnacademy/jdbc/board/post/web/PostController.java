@@ -38,8 +38,8 @@ public class PostController {
     public String postPostInsert(@RequestParam String title,
                                  @RequestParam String content,
                                  HttpSession session) {
-
-        postService.createPost((Integer) session.getAttribute("login"), title, content);
+        User user = (User) session.getAttribute("login");
+        postService.createPost(user.getUserNum(), title, content);
         return "redirect:/postView/0";
     }
 
@@ -67,6 +67,12 @@ public class PostController {
                                  HttpSession session) {
         User user = (User) session.getAttribute("login");
         postService.modifyPost(postNum, title, content, user.getUserNum());
+        return "redirect:/postView/0";
+    }
+
+    @GetMapping("/postDelete/{postNum}")
+    public String getPostDelete(@PathVariable long postNum) {
+        postService.deletePost(postNum);
         return "redirect:/postView/0";
     }
 }

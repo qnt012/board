@@ -6,7 +6,6 @@ import com.nhnacademy.jdbc.board.post.domain.PostView;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
-import java.util.Optional;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
@@ -15,7 +14,7 @@ public interface PostMapper {
     List<PostView> selectPostViews(@Param("offset") int offset);
     void insertPost(@Param("writerNum") long writerNum, @Param("title") String title, @Param("content") String content);
     void updatePost(@Param("postNum") long postNum, @Param("title") String title, @Param("content") String content, @Param("modifierNum") long modifierNum);
-//    void deleteById(long id);
+    void updatePostVisibility(@Param("postNum") long postNum, @Param("visibility") boolean visibility);
     int selectPostCount();
     List<Comment> selectPostComments(long postNum);
 }

@@ -23,7 +23,7 @@ public class UserLoginController {
                             HttpSession session) {
         Optional<User> user = userService.login(id, pwd);
         if (user.isPresent()) {
-            session.setAttribute("login", user.get());
+            session.setAttribute("login", user.get().getUserAuthInfo());
             return "redirect:/postView/0";
         }
         return "redirect:/";

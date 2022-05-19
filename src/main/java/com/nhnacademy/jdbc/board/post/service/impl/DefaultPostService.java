@@ -47,4 +47,9 @@ public class DefaultPostService implements PostService {
     public List<Comment> viewComments(long postNum) {
         return postMapper.selectPostComments(postNum);
     }
+
+    @Override
+    public void deletePost(long postNum) {
+        postMapper.updatePostVisibility(postNum, false);
+    }
 }

@@ -42,4 +42,8 @@ public class User implements Serializable{
     public int hashCode() {
         return Objects.hash(userNum, userId, userPassword);
     }
+
+    public User getUserAuthInfo() {
+        return new User(userNum, userId, null);
+    }
 }

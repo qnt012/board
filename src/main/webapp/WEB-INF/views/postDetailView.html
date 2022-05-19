@@ -6,7 +6,7 @@
 </head>
 <body>
 <a th:href="@{|/postModify/${post.postNum}|}" th:if="${isWriter}" >수정</a>
-
+<a th:href="@{|/postDelete/${post.postNum}|}" th:if="${isWriter}" >삭제</a>
 <br/>
 번호 <span th:text="${post.postNum}"></span><br/>
 제목 <span th:text="${post.title}"></span><br/>

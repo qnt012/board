@@ -14,7 +14,7 @@
         <th>작성일시</th>
         <th>댓글개수</th>
     </tr>
-    <tr th:each="postView : ${postViews}">
+    <tr th:each="postView : ${postViews}" th:if="${postView.visibility}">
         <td th:text="${postView.postNum}"></td>
         <td><a th:href="@{|/postDetail/${postView.postNum}|}" th:text="${postView.title}"></a></td>
         <td th:text="${postView.writerId}"></td>

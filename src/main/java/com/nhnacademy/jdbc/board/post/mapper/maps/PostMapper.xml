@@ -8,14 +8,15 @@
             select post_num, title, content,
                    (select user_id from users where user_num = writer_num) writer_id,
                    (select user_id from users where user_num = modifier_num) modifier_id,
-                   write_time, modify_time
+                   write_time, modify_time, visibility
             from posts
             where post_num = #{postNum}
         </select>
 
         <select id="selectPostViews" resultType="com.nhnacademy.jdbc.board.post.domain.PostView">
             select post_num, title, user_id, write_time,
-                   (select count(*) from comments C where C.post_num = P.post_num) comment_count
+                   (select count(*) from comments C where C.post_num = P.post_num) comment_count,
+                   visibility
             from posts P inner join users on writer_num = user_num limit 20 offset #{offset};
         </select>
 
@@ -42,4 +43,9 @@
         select comment_num, (select user_id from users where user_num = writer_num) writer_id, comment_content
         from comments where post_num = #{postNum};
     </select>
+
+    <update id="updatePostVisibility">
+        update posts set visibility=#{visibility}
+        where post_num = #{postNum}
+    </update>
 </mapper>
