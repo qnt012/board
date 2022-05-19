@@ -5,6 +5,7 @@
     <title>postDetailView</title>
 </head>
 <body>
+<a href="/postView/0">목록으로</a><br/>
 <a th:href="@{|/postModify/${post.postNum}|}" th:if="${isWriter}" >수정</a>
 <a th:href="@{|/postDelete/${post.postNum}|}" th:if="${isWriter}" >삭제</a>
 <br/>
@@ -16,6 +17,10 @@
 작성일시 <span th:text="${post.writeTime}"></span><br/>
 수정일시 <span th:text="${post.modifyTime}"></span><br/><br/>
 --댓글--
+<form method="post" th:action="@{|/commentInsert/${post.postNum}|}">
+    <textarea rows="3" cols="50" name="commentContent"></textarea>
+    <input type="submit" value="댓글작성"/>
+</form><br/>
 <div th:each="comment: ${comments}">
     <span th:text="${comment.writerId}"></span><br/>
     <span th:text="${comment.commentContent}"></span><br/><br/>

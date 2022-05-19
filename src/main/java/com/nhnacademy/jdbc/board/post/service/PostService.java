@@ -14,4 +14,5 @@ public interface PostService {
     int getMaxPage();
     List<Comment> viewComments(long postNum);
     void deletePost(long postNum);
+    void createComment(long postNum, long writerNum, String commentContent);
 }

@@ -48,4 +48,9 @@
         update posts set visibility=#{visibility}
         where post_num = #{postNum}
     </update>
+
+    <insert id="insertComment">
+        insert into comments (post_num, writer_num, comment_content)
+        values(#{postNum}, #{writerNum}, '${commentContent}');
+    </insert>
 </mapper>

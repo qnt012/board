@@ -75,4 +75,13 @@ public class PostController {
         postService.deletePost(postNum);
         return "redirect:/postView/0";
     }
+
+    @PostMapping("/commentInsert/{postNum}")
+    public String postPostModify(@PathVariable long postNum,
+                                 @RequestParam String commentContent,
+                                 HttpSession session) {
+        User user = (User) session.getAttribute("login");
+        postService.createComment(postNum, user.getUserNum(), commentContent);
+        return "redirect:/postDetail/{postNum}";
+    }
 }

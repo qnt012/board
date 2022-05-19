@@ -17,4 +17,5 @@ public interface PostMapper {
     void updatePostVisibility(@Param("postNum") long postNum, @Param("visibility") boolean visibility);
     int selectPostCount();
     List<Comment> selectPostComments(long postNum);
+    void insertComment(@Param("postNum") long postNum, @Param("writerNum") long writerNum, @Param("commentContent") String commentContent);
 }
