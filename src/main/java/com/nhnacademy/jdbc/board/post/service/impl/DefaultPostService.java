@@ -34,6 +34,11 @@ public class DefaultPostService implements PostService {
     }
 
     @Override
+    public void modifyPost(long postNum, String title, String content, long modifierNum) {
+        postMapper.updatePost(postNum, title,content, modifierNum);
+    }
+
+    @Override
     public int getMaxPage() {
         return postMapper.selectPostCount() / 20;
     }

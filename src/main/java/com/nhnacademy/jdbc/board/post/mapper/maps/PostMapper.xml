@@ -24,10 +24,10 @@
             values(1, #{writerNum}, '${title}', '${content}', now());
         </insert>
 
-    <!--    <update id="updateNameById">-->
-    <!--        update JdbcUsers set name='${name}'-->
-    <!--        where id = #{id}-->
-    <!--    </update>-->
+        <update id="updatePost">
+            update posts set title='${title}', content='${content}', modifier_num=#{modifierNum}, modify_time=now()
+            where post_num = #{postNum}
+        </update>
 
     <!--    <delete id="deleteById">-->
     <!--        delete from JdbcUsers where id=#{id}-->

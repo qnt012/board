@@ -1,25 +1,14 @@
 package com.nhnacademy.jdbc.board.user.domain;
 
-/**
- * @Author : marco@nhnacademy.com
- * @Date : 17/05/2022
- */
-public class User {
+import java.io.Serializable;
+import java.util.Objects;
+import lombok.Getter;
+
+@Getter
+public class User implements Serializable{
     private final int userNum;
     private final String userId;
     private final String userPassword;
-
-    public int getUserNum() {
-        return userNum;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
-    }
 
     public User(int userNum, String userId, String userPassword) {
         this.userNum = userNum;
@@ -36,4 +25,21 @@ public class User {
             '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return userNum == user.userNum && Objects.equals(userId, user.userId) &&
+            Objects.equals(userPassword, user.userPassword);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userNum, userId, userPassword);
+    }
 }

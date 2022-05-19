@@ -14,7 +14,7 @@ public interface PostMapper {
     Post selectPost(long postNum);
     List<PostView> selectPostViews(@Param("offset") int offset);
     void insertPost(@Param("writerNum") long writerNum, @Param("title") String title, @Param("content") String content);
-//    void updateNameById(String name, long id);
+    void updatePost(@Param("postNum") long postNum, @Param("title") String title, @Param("content") String content, @Param("modifierNum") long modifierNum);
 //    void deleteById(long id);
     int selectPostCount();
     List<Comment> selectPostComments(long postNum);

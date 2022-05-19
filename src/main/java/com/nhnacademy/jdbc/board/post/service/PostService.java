@@ -10,6 +10,7 @@ public interface PostService {
     Post getPost(long postNum);
     List<PostView> viewPosts(int page);
     void createPost(long writerNum, String title, String content);
+    void modifyPost(long postNum, String title, String content, long modifierNum);
     int getMaxPage();
     List<Comment> viewComments(long postNum);
 }
