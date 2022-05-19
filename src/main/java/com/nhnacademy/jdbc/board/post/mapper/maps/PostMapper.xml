@@ -37,4 +37,9 @@
         select count(*)
         from posts;
     </select>
+
+    <select id="selectPostComments" resultType="com.nhnacademy.jdbc.board.post.domain.Comment">
+        select comment_num, (select user_id from users where user_num = writer_num) writer_id, comment_content
+        from comments where post_num = #{postNum};
+    </select>
 </mapper>

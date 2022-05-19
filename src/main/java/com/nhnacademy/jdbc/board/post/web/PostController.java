@@ -43,6 +43,7 @@ public class PostController {
     @GetMapping("/postDetail/{postNum}")
     public String getPostDetail(@PathVariable long postNum, ModelMap modelMap) {
         modelMap.put("post", postService.getPost(postNum));
+        modelMap.put("comments", postService.viewComments(postNum));
         return "postDetailView";
     }
 }
