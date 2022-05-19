@@ -13,7 +13,7 @@
         <select id="selectPostViews" resultType="com.nhnacademy.jdbc.board.post.domain.PostView">
             select post_num, title, user_id, write_time,
                    (select count(*) from comments C where C.post_num = P.post_num) comment_count
-            from posts P inner join users on writer_num = user_num;
+            from posts P inner join users on writer_num = user_num limit 20 offset #{offset};
         </select>
 
         <insert id="insertPost">
@@ -29,4 +29,9 @@
     <!--    <delete id="deleteById">-->
     <!--        delete from JdbcUsers where id=#{id}-->
     <!--    </delete>-->
+
+    <select id="selectPostCount" resultType="int">
+        select count(*)
+        from posts;
+    </select>
 </mapper>

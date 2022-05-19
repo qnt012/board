@@ -16,12 +16,17 @@ public class DefaultPostService implements PostService {
     }
 
     @Override
-    public List<PostView> viewPosts() {
-        return postMapper.selectPostViews();
+    public List<PostView> viewPosts(int page) {
+        return postMapper.selectPostViews(20 * page);
     }
 
     @Override
     public void createPost(long writerNum, String title, String content) {
         postMapper.insertPost(writerNum, title, content);
+    }
+
+    @Override
+    public int getMaxPage() {
+        return postMapper.selectPostCount() / 20;
     }
 }

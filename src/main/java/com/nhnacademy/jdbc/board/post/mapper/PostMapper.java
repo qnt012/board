@@ -10,8 +10,9 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface PostMapper {
 //    Optional<Post> selectPost(long postNum);
-    List<PostView> selectPostViews();
+    List<PostView> selectPostViews(@Param("offset") int offset);
     void insertPost(@Param("writerNum") long writerNum, @Param("title") String title, @Param("content") String content);
 //    void updateNameById(String name, long id);
 //    void deleteById(long id);
+    int selectPostCount();
 }

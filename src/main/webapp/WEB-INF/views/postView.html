@@ -22,6 +22,9 @@
         <td th:text="${postView.commentCount}"></td>
     </tr>
 </table>
+<a th:href="@{|/postView/${page - 1}|}" th:if="${page} > 0">이전</a>
+<a th:href="@{|/postView/${page + 1}|}" th:if="${page} < ${maxPage}">다음</a>
+<br/>
 <a href="/postInsert">등록</a>
 </body>
 </html>
