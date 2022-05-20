@@ -28,6 +28,11 @@ public class DefaultPostService implements PostService {
     }
 
     @Override
+    public List<PostView> viewDeletePosts(int page) {
+        return postMapper.selectInvisiblePostViews(20 * page);
+    }
+
+    @Override
     public void createPost(long writerNum, String title, String content) {
         postMapper.insertPost(writerNum, title, content);
     }
@@ -38,34 +43,13 @@ public class DefaultPostService implements PostService {
     }
 
     @Override
-    public int getMaxPage() {
-        return postMapper.selectPostCount() / 20;
-    }
-
-//    @Override
-//    public List<Comment> viewComments(long postNum) {
-//        return postMapper.selectPostComments(postNum);
-//    }
-
-    @Override
     public void deletePost(long postNum) {
         postMapper.updatePostVisibility(postNum, false);
     }
-
-//    @Override
-//    public void createComment(long postNum, long writerNum, String commentContent) {
-//        .insertComment(postNum, writerNum, commentContent);
-//    }
 
     @Override
     public void restorePost(long postNum) {
         postMapper.updatePostVisibility(postNum, true);
     }
-
-//    @Override
-//    public Comment getComment(long commentNum) {
-//        return postMapper.selectComment(commentNum);
-//    }
-
 
 }

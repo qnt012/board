@@ -17,7 +17,18 @@
             select post_num, title, user_id, write_time,
                    (select count(*) from comments C where C.post_num = P.post_num) comment_count,
                    visibility
-            from posts P inner join users on writer_num = user_num limit 20 offset #{offset};
+            from posts P inner join users on writer_num = user_num
+            where visibility
+            limit 20 offset #{offset};
+        </select>
+
+        <select id="selectInvisiblePostViews" resultType="com.nhnacademy.jdbc.board.post.domain.PostView">
+            select post_num, title, user_id, write_time,
+                   (select count(*) from comments C where C.post_num = P.post_num) comment_count,
+                   visibility
+            from posts P inner join users on writer_num = user_num
+            where !visibility
+            limit 20 offset #{offset};
         </select>
 
         <insert id="insertPost">
@@ -29,11 +40,6 @@
             update posts set title='${title}', content='${content}', modifier_num=#{modifierNum}, modify_time=now()
             where post_num = #{postNum}
         </update>
-
-    <select id="selectPostCount" resultType="int">
-        select count(*)
-        from posts;
-    </select>
 
     <update id="updatePostVisibility">
         update posts set visibility=#{visibility}

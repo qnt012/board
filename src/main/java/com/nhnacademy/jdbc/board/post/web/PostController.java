@@ -2,9 +2,12 @@ package com.nhnacademy.jdbc.board.post.web;
 
 import com.nhnacademy.jdbc.board.like.service.LikeService;
 import com.nhnacademy.jdbc.board.post.domain.Post;
+import com.nhnacademy.jdbc.board.post.domain.PostView;
 import com.nhnacademy.jdbc.board.post.service.CommentService;
 import com.nhnacademy.jdbc.board.post.service.PostService;
 import com.nhnacademy.jdbc.board.user.domain.User;
+
+import java.util.List;
 import java.util.Objects;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -32,9 +35,10 @@ public class PostController {
     @GetMapping("/postView/{page}")
     public String getPostView(@PathVariable int page, ModelMap modelMap, HttpSession session){
         User user = (User) session.getAttribute("login");
-        modelMap.put("postViews", postService.viewPosts(page));
+        List<PostView> postViews = postService.viewPosts(page);
+        modelMap.put("postViews", postViews);
         modelMap.put("page", page);
-        modelMap.put("maxPage", postService.getMaxPage());
+        modelMap.put("maxPage", postViews.size() / 20);
         modelMap.put("isAdmin", user.isAdmin());
         return "postView";
     }
@@ -89,9 +93,10 @@ public class PostController {
 
     @GetMapping("/postDeleteList/{page}")
     public String getPostDeleteList(@PathVariable int page, ModelMap modelMap){
-        modelMap.put("postViews", postService.viewPosts(page));
+        List<PostView> postViews = postService.viewDeletePosts(page);
+        modelMap.put("postViews", postViews);
         modelMap.put("page", page);
-        modelMap.put("maxPage", postService.getMaxPage());
+        modelMap.put("maxPage", postViews.size() / 20);
         return "postDeleteList";
     }
 

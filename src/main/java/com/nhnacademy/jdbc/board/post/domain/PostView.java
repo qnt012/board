@@ -10,5 +10,4 @@ public class PostView {
     String writerId;
     Timestamp writeTime;
     int commentCount;
-    boolean visibility;
 }
