@@ -40,8 +40,17 @@
                      inner join likes L on L.post_num = P.post_num
             where visibility and L.user_num = #{userNum}
             limit 20 offset #{offset};
-
         </select>
+
+    <select id="selectPostViewsByKeyword" resultType="com.nhnacademy.jdbc.board.post.domain.PostView">
+        select post_num, title, user_id, write_time,
+               (select count(*) from comments C where C.post_num = P.post_num) comment_count,
+               visibility
+        from posts P inner join users on writer_num = user_num
+        where visibility and title like '%${keyword}%'
+        limit 20 offset #{offset};
+
+    </select>
 
         <insert id="insertPost">
             insert into posts (board_num, writer_num, title, content, write_time)

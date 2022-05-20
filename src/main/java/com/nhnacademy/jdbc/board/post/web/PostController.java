@@ -116,4 +116,16 @@ public class PostController {
         modelMap.put("maxPage", postViews.size() / 20);
         return "postLikeList";
     }
+
+    @PostMapping("/search/{page}")
+    public String postPostModify(@PathVariable int page,
+                                 @RequestParam String title,
+                                 ModelMap modelMap,
+                                 HttpSession session) {
+        List<PostView> postViews = postService.findPostsByTitle(title, page);
+        modelMap.put("postViews", postViews);
+        modelMap.put("page", page);
+        modelMap.put("maxPage", postViews.size() / 20);
+        return "postSearchView";
+    }
 }

@@ -37,6 +37,11 @@ public class DefaultPostService implements PostService {
     }
 
     @Override
+    public List<PostView> findPostsByTitle(String keyword, int page) {
+        return postMapper.selectPostViewsByKeyword(keyword, page);
+    }
+
+    @Override
     public void createPost(long writerNum, String title, String content) {
         postMapper.insertPost(writerNum, title, content);
     }
