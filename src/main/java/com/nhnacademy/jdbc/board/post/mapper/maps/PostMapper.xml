@@ -72,4 +72,9 @@
         where comment_num = #{commentNum}
     </update>
 
+    <delete id="deleteComment">
+        delete from comments
+        where comment_num = #{commentNum}
+    </delete>
+
 </mapper>

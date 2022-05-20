@@ -72,4 +72,11 @@ public class DefaultPostService implements PostService {
         postMapper.updateComment(commentNum, commentContent);
         return postMapper.selectPostNum(commentNum);
     }
+
+    @Override
+    public long removeComment(long commentNum) {
+        long postNum = postMapper.selectPostNum(commentNum);
+        postMapper.deleteComment(commentNum);
+        return postNum;
+    }
 }

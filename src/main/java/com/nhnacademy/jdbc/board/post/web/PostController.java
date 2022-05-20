@@ -115,5 +115,9 @@ public class PostController {
         return "redirect:/postDetail/"+postNum;
     }
 
-
+    @GetMapping("/commentDelete/{commentNum}")
+    public String getCommentDelete(@PathVariable long commentNum) {
+        long postNum = postService.removeComment(commentNum);
+        return "redirect:/postDetail/"+postNum;
+    }
 }

@@ -18,4 +18,5 @@ public interface PostService {
     void restorePost(long postNum);
     Comment getComment(long commentNum);
     long modifyComment(long commentNum, String commentContent);
+    long removeComment(long commentNum);
 }
