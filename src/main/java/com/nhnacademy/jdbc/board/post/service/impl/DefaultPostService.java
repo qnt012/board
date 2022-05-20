@@ -42,41 +42,30 @@ public class DefaultPostService implements PostService {
         return postMapper.selectPostCount() / 20;
     }
 
-    @Override
-    public List<Comment> viewComments(long postNum) {
-        return postMapper.selectPostComments(postNum);
-    }
+//    @Override
+//    public List<Comment> viewComments(long postNum) {
+//        return postMapper.selectPostComments(postNum);
+//    }
 
     @Override
     public void deletePost(long postNum) {
         postMapper.updatePostVisibility(postNum, false);
     }
 
-    @Override
-    public void createComment(long postNum, long writerNum, String commentContent) {
-        postMapper.insertComment(postNum, writerNum, commentContent);
-    }
+//    @Override
+//    public void createComment(long postNum, long writerNum, String commentContent) {
+//        .insertComment(postNum, writerNum, commentContent);
+//    }
 
     @Override
     public void restorePost(long postNum) {
         postMapper.updatePostVisibility(postNum, true);
     }
 
-    @Override
-    public Comment getComment(long commentNum) {
-        return postMapper.selectComment(commentNum);
-    }
+//    @Override
+//    public Comment getComment(long commentNum) {
+//        return postMapper.selectComment(commentNum);
+//    }
 
-    @Override
-    public long modifyComment(long commentNum, String commentContent) {
-        postMapper.updateComment(commentNum, commentContent);
-        return postMapper.selectPostNum(commentNum);
-    }
 
-    @Override
-    public long removeComment(long commentNum) {
-        long postNum = postMapper.selectPostNum(commentNum);
-        postMapper.deleteComment(commentNum);
-        return postNum;
-    }
 }

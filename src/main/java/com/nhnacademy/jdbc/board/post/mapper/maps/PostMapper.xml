@@ -39,10 +39,10 @@
         from posts;
     </select>
 
-    <select id="selectPostComments" resultType="com.nhnacademy.jdbc.board.post.domain.Comment">
-        select comment_num, (select user_id from users where user_num = writer_num) writer_id, comment_content
-        from comments where post_num = #{postNum};
-    </select>
+<!--    <select id="selectPostComments" resultType="com.nhnacademy.jdbc.board.post.domain.Comment">-->
+<!--        select comment_num, (select user_id from users where user_num = writer_num) writer_id, comment_content-->
+<!--        from comments where post_num = #{postNum};-->
+<!--    </select>-->
 
     <update id="updatePostVisibility">
         update posts set visibility=#{visibility}
@@ -55,26 +55,12 @@
         inner join posts B on B.post_num = A.post_num where comment_num = #{commentNum};
     </select>
 
-    <select id="selectComment" resultType="com.nhnacademy.jdbc.board.post.domain.Comment">
-        select comment_num, user_id, comment_content
-        from comments
-        inner join users on writer_num = user_num
-        where comment_num = #{commentNum};
-    </select>
 
-    <insert id="insertComment">
-        insert into comments (post_num, writer_num, comment_content)
-        values(#{postNum}, #{writerNum}, '${commentContent}');
-    </insert>
 
-    <update id="updateComment">
-        update comments set comment_content='${commentContent}'
-        where comment_num = #{commentNum}
-    </update>
+<!--    <insert id="insertComment">-->
+<!--        insert into comments (post_num, writer_num, comment_content)-->
+<!--        values(#{postNum}, #{writerNum}, '${commentContent}');-->
+<!--    </insert>-->
 
-    <delete id="deleteComment">
-        delete from comments
-        where comment_num = #{commentNum}
-    </delete>
 
 </mapper>

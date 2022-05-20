@@ -12,11 +12,9 @@ public interface PostService {
     void createPost(long writerNum, String title, String content);
     void modifyPost(long postNum, String title, String content, long modifierNum);
     int getMaxPage();
-    List<Comment> viewComments(long postNum);
+//    List<Comment> viewComments(long postNum);
     void deletePost(long postNum);
-    void createComment(long postNum, long writerNum, String commentContent);
+//    void createComment(long postNum, long writerNum, String commentContent);
     void restorePost(long postNum);
-    Comment getComment(long commentNum);
-    long modifyComment(long commentNum, String commentContent);
-    long removeComment(long commentNum);
+//    Comment getComment(long commentNum);
 }

@@ -16,10 +16,8 @@ public interface PostMapper {
     void updatePost(@Param("postNum") long postNum, @Param("title") String title, @Param("content") String content, @Param("modifierNum") long modifierNum);
     void updatePostVisibility(@Param("postNum") long postNum, @Param("visibility") boolean visibility);
     int selectPostCount();
-    List<Comment> selectPostComments(long postNum);
-    int selectPostNum(long commentNum);
-    Comment selectComment(long commentNum);
-    void insertComment(@Param("postNum") long postNum, @Param("writerNum") long writerNum, @Param("commentContent") String commentContent);
-    void updateComment(@Param("commentNum") long commentNum, @Param("commentContent") String commentContent);
-    void deleteComment(long commentNum);
+//    List<Comment> selectPostComments(long postNum);
+//    Comment selectComment(long commentNum);
+//    void insertComment(@Param("postNum") long postNum, @Param("writerNum") long writerNum, @Param("commentContent") String commentContent);
+
 }

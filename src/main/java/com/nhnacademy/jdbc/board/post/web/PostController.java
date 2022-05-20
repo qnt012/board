@@ -1,6 +1,7 @@
 package com.nhnacademy.jdbc.board.post.web;
 
 import com.nhnacademy.jdbc.board.post.domain.Post;
+import com.nhnacademy.jdbc.board.post.service.CommentService;
 import com.nhnacademy.jdbc.board.post.service.PostService;
 import com.nhnacademy.jdbc.board.user.domain.User;
 import java.util.Objects;
@@ -15,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class PostController {
     private final PostService postService;
+    private final CommentService commentService;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService,
+                          CommentService commentService) {
         this.postService = postService;
+        this.commentService = commentService;
     }
 
 
@@ -50,7 +54,7 @@ public class PostController {
         User user = (User) session.getAttribute("login");
         Post post = postService.getPost(postNum);
         modelMap.put("post", post);
-        modelMap.put("comments", postService.viewComments(postNum));
+        modelMap.put("comments", commentService.viewComments(postNum));
         modelMap.put("isWriter", Objects.equals(user.getUserId(), post.getWriterId()));
         modelMap.put("isAdmin", user.isAdmin());
         return "postDetailView";
@@ -83,7 +87,7 @@ public class PostController {
                                  @RequestParam String commentContent,
                                  HttpSession session) {
         User user = (User) session.getAttribute("login");
-        postService.createComment(postNum, user.getUserNum(), commentContent);
+        commentService.createComment(postNum, user.getUserNum(), commentContent);
         return "redirect:/postDetail/{postNum}";
     }
 
@@ -104,20 +108,20 @@ public class PostController {
 
     @GetMapping("/commentModify/{commentNum}")
     public String getCommentModify(@PathVariable long commentNum, ModelMap modelMap) {
-        modelMap.put("comment", postService.getComment(commentNum));
+        modelMap.put("comment", commentService.getComment(commentNum));
         return "commentModifyForm";
     }
 
     @PostMapping("/commentModify/{commentNum}")
     public String postCommentModify(@PathVariable long commentNum,
                                    @RequestParam String commentContent) {
-        long postNum = postService.modifyComment(commentNum, commentContent);
+        long postNum = commentService.modifyComment(commentNum, commentContent);
         return "redirect:/postDetail/"+postNum;
     }
 
     @GetMapping("/commentDelete/{commentNum}")
     public String getCommentDelete(@PathVariable long commentNum) {
-        long postNum = postService.removeComment(commentNum);
+        long postNum = commentService.removeComment(commentNum);
         return "redirect:/postDetail/"+postNum;
     }
 }
