@@ -1,5 +1,6 @@
 package com.nhnacademy.jdbc.board.post.web;
 
+import com.nhnacademy.jdbc.board.like.service.LikeService;
 import com.nhnacademy.jdbc.board.post.domain.Post;
 import com.nhnacademy.jdbc.board.post.service.CommentService;
 import com.nhnacademy.jdbc.board.post.service.PostService;
@@ -17,11 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PostController {
     private final PostService postService;
     private final CommentService commentService;
+    private final LikeService likeService;
 
     public PostController(PostService postService,
-                          CommentService commentService) {
+                          CommentService commentService,
+                          LikeService likeService) {
         this.postService = postService;
         this.commentService = commentService;
+        this.likeService = likeService;
     }
 
 
@@ -57,6 +61,7 @@ public class PostController {
         modelMap.put("comments", commentService.viewComments(postNum));
         modelMap.put("isWriter", Objects.equals(user.getUserId(), post.getWriterId()));
         modelMap.put("isAdmin", user.isAdmin());
+        modelMap.put("isLikePost", likeService.isLikePost(user.getUserNum(), postNum));
         return "postDetailView";
     }
 
