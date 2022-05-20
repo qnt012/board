@@ -3,6 +3,7 @@ package com.nhnacademy.jdbc.board.user.web;
 import com.nhnacademy.jdbc.board.user.domain.User;
 import com.nhnacademy.jdbc.board.user.service.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -18,8 +19,8 @@ public class UserLoginController {
     }
 
     @PostMapping("/login")
-    public String postLogin(@RequestParam String id,
-                            @RequestParam String pwd,
+    public String postLogin( String id,
+                             String pwd,
                             HttpSession session) {
         Optional<User> user = userService.login(id, pwd);
         if (user.isPresent()) {

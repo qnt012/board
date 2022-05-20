@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import com.nhnacademy.jdbc.board.post.domain.Comment;
 import com.nhnacademy.jdbc.board.post.domain.Post;
 import com.nhnacademy.jdbc.board.post.domain.PostView;
 import com.nhnacademy.jdbc.board.post.service.PostService;
@@ -156,5 +157,37 @@ public class PostControllerTest {
 
         verify(postService).restorePost(1);
     }
+
+    @Test
+    void getCommentModifyTest() throws Exception{
+        Comment comment = new Comment(1,"bomin","comment");
+        when(postService.getComment(1)).thenReturn(comment);
+        MvcResult mvcResult = mockMvc.perform(get("/commentModify/{commentNum}",1))
+            .andExpect(status().isOk())
+            .andExpect(model().attribute("comment", postService.getComment(1)))
+            .andExpect(view().name("commentModifyForm"))
+            .andReturn();
+        assertThat(mvcResult.getModelAndView().getModelMap().getAttribute("comment")).isEqualTo(comment);
+    }
+
+    @Test
+    void postCommentModifyTest() throws  Exception{
+        when(postService.modifyComment(anyLong(), anyString())).thenReturn(1L);
+        MvcResult mvcResult = mockMvc.perform(post("/commentModify/{commentNum}",1)
+                .param("commentContent","ttttt"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(view().name("redirect:/postDetail/1"))
+            .andReturn();
+    }
+
+    @Test
+    void getCommentDeleteTest() throws Exception{
+        when(postService.removeComment(anyLong())).thenReturn(1L);
+        MvcResult mvcResult = mockMvc.perform(get("/commentDelete/{commentNum}",1))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(view().name("redirect:/postDetail/1"))
+            .andReturn();
+    }
+
 
 }
