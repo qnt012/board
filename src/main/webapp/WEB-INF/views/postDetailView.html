@@ -29,7 +29,12 @@
 </form><br/>
 <div th:each="comment: ${comments}">
     <span th:text="${comment.writerId}"></span><br/>
-    <span th:text="${comment.commentContent}"></span><br/><br/>
+    <span th:text="${comment.commentContent}"></span><br/>
+    <div th:if="${post.visibility}">
+        <a th:href="@{|/commentModify/${comment.commentNum}|}" th:if="${#strings.equals(comment.writerId,session.login.getUserId()) || isAdmin}" >댓글 수정</a>
+        <a th:href="@{|/commentDelete/${comment.commentNum}|}" th:if="${#strings.equals(comment.writerId,session.login.getUserId()) || isAdmin}" >댓글 삭제</a>
+    </div>
+    <br/>
 </div>
 </body>
 </html>

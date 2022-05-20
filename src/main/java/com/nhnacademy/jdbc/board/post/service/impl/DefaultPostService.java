@@ -61,4 +61,15 @@ public class DefaultPostService implements PostService {
     public void restorePost(long postNum) {
         postMapper.updatePostVisibility(postNum, true);
     }
+
+    @Override
+    public Comment getComment(long commentNum) {
+        return postMapper.selectComment(commentNum);
+    }
+
+    @Override
+    public long modifyComment(long commentNum, String commentContent) {
+        postMapper.updateComment(commentNum, commentContent);
+        return postMapper.selectPostNum(commentNum);
+    }
 }

@@ -102,5 +102,18 @@ public class PostController {
         return "redirect:/postDeleteList/0";
     }
 
+    @GetMapping("/commentModify/{commentNum}")
+    public String getCommentModify(@PathVariable long commentNum, ModelMap modelMap) {
+        modelMap.put("comment", postService.getComment(commentNum));
+        return "commentModifyForm";
+    }
+
+    @PostMapping("/commentModify/{commentNum}")
+    public String getCommentModify(@PathVariable long commentNum,
+                                   @RequestParam String commentContent) {
+        long postNum = postService.modifyComment(commentNum, commentContent);
+        return "redirect:/postDetail/"+postNum;
+    }
+
 
 }
