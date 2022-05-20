@@ -109,7 +109,7 @@ public class PostController {
     }
 
     @PostMapping("/commentModify/{commentNum}")
-    public String getCommentModify(@PathVariable long commentNum,
+    public String postCommentModify(@PathVariable long commentNum,
                                    @RequestParam String commentContent) {
         long postNum = postService.modifyComment(commentNum, commentContent);
         return "redirect:/postDetail/"+postNum;
