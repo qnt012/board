@@ -12,9 +12,15 @@ public class DefaultLikeService implements LikeService {
         this.likeMapper = likeMapper;
     }
 
-
     @Override
     public boolean isLikePost(long userNum, long postNum) {
         return likeMapper.selectLike(userNum, postNum).isPresent();
+    }
+
+    @Override
+    public void changeLike(long userNum, long postNum) {
+        boolean isLikePost = likeMapper.selectLike(userNum, postNum).isPresent();
+        if (isLikePost) likeMapper.deleteLike(userNum, postNum);
+        else likeMapper.insertLike(userNum, postNum);
     }
 }

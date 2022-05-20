@@ -7,4 +7,11 @@
     <select id="selectLike" resultType="com.nhnacademy.jdbc.board.like.domain.Like">
         select * from likes where user_num = #{userNum} and post_num = #{postNum}
     </select>
+    <insert id="insertLike">
+        insert into likes (user_num, post_num)
+        values(#{userNum}, #{postNum});
+    </insert>
+    <delete id="deleteLike">
+        delete from likes where user_num = #{userNum} and post_num = #{postNum}
+    </delete>
 </mapper>
