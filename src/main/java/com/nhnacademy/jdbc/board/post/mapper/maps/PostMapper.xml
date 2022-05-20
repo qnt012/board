@@ -31,6 +31,18 @@
             limit 20 offset #{offset};
         </select>
 
+        <select id="selectLikePostViews" resultType="com.nhnacademy.jdbc.board.post.domain.PostView">
+            select P.post_num, title, user_id, write_time,
+                   (select count(*) from comments C where C.post_num = P.post_num) comment_count,
+                   visibility
+            from posts P
+                     inner join users U on writer_num = U.user_num
+                     inner join likes L on L.post_num = P.post_num
+            where visibility and L.user_num = #{userNum}
+            limit 20 offset #{offset};
+
+        </select>
+
         <insert id="insertPost">
             insert into posts (board_num, writer_num, title, content, write_time)
             values(1, #{writerNum}, '${title}', '${content}', now());

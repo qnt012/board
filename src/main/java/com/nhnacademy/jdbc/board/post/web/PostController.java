@@ -106,4 +106,14 @@ public class PostController {
         postService.restorePost(postNum);
         return "redirect:/postDeleteList/0";
     }
+
+    @GetMapping("/postLikeList/{page}")
+    public String getPostLikeList(@PathVariable int page, ModelMap modelMap, HttpSession session){
+        User user = (User) session.getAttribute("login");
+        List<PostView> postViews = postService.viewLikePosts(user.getUserNum(), page);
+        modelMap.put("postViews", postViews);
+        modelMap.put("page", page);
+        modelMap.put("maxPage", postViews.size() / 20);
+        return "postLikeList";
+    }
 }

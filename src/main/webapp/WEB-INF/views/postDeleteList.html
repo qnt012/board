@@ -22,5 +22,7 @@
         <td th:text="${postView.commentCount}"></td>
     </tr>
 </table>
+<a th:href="@{|/postDeleteList/${page - 1}|}" th:if="${page} > 0">이전</a>
+<a th:href="@{|/postDeleteList/${page + 1}|}" th:if="${page} < ${maxPage}">다음</a>
 </body>
 </html>

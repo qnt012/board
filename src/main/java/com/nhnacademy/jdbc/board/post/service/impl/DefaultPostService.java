@@ -1,6 +1,5 @@
 package com.nhnacademy.jdbc.board.post.service.impl;
 
-import com.nhnacademy.jdbc.board.post.domain.Comment;
 import com.nhnacademy.jdbc.board.post.domain.Post;
 import com.nhnacademy.jdbc.board.post.domain.PostView;
 import com.nhnacademy.jdbc.board.post.mapper.PostMapper;
@@ -30,6 +29,11 @@ public class DefaultPostService implements PostService {
     @Override
     public List<PostView> viewDeletePosts(int page) {
         return postMapper.selectInvisiblePostViews(20 * page);
+    }
+
+    @Override
+    public List<PostView> viewLikePosts(long userNum, int page) {
+        return postMapper.selectLikePostViews(userNum, page);
     }
 
     @Override
