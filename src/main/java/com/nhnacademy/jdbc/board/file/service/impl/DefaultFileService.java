@@ -16,4 +16,9 @@ public class DefaultFileService implements FileService {
     public void uploadFile(long postNum, String fileName) {
         fileMapper.insertFile(postNum, fileName);
     }
+
+    @Override
+    public String getFileName(long postNum) {
+        return fileMapper.selectFileName(postNum);
+    }
 }

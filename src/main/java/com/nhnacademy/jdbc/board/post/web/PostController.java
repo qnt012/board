@@ -89,6 +89,7 @@ public class PostController {
         modelMap.put("isWriter", Objects.equals(user.getUserId(), post.getWriterId()));
         modelMap.put("isAdmin", user.isAdmin());
         modelMap.put("isLikePost", likeService.isLikePost(user.getUserNum(), postNum));
+        modelMap.put("fileName", fileService.getFileName(postNum));
         return "postDetailView";
     }
 

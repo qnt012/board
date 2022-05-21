@@ -7,4 +7,7 @@
     <insert id="insertFile">
         insert into files(post_num, file_name) values(#{postNum}, '${fileName}')
     </insert>
+    <select id="selectFileName" resultType="java.lang.String">
+        select file_name from files where post_num = #{postNum}
+    </select>
 </mapper>
