@@ -118,10 +118,9 @@ public class PostController {
     }
 
     @PostMapping("/search/{page}")
-    public String postPostModify(@PathVariable int page,
-                                 @RequestParam String title,
-                                 ModelMap modelMap,
-                                 HttpSession session) {
+    public String postSearch(@PathVariable int page,
+                             @RequestParam String title,
+                             ModelMap modelMap) {
         List<PostView> postViews = postService.findPostsByTitle(title, page);
         modelMap.put("postViews", postViews);
         modelMap.put("page", page);

@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import com.nhnacademy.jdbc.board.like.service.LikeService;
 import com.nhnacademy.jdbc.board.post.domain.Comment;
 import com.nhnacademy.jdbc.board.post.domain.Post;
 import com.nhnacademy.jdbc.board.post.domain.PostView;
@@ -36,6 +37,7 @@ public class PostControllerTest {
     private MockMvc mockMvc;
     private PostService postService;
     private CommentService commentService;
+    private LikeService likeService;
     private User user;
     private Post post;
     private MockHttpSession session;
@@ -44,7 +46,8 @@ public class PostControllerTest {
     void setUp() {
         postService = mock(PostService.class);
         commentService = mock(CommentService.class);
-        mockMvc = MockMvcBuilders.standaloneSetup(new PostController(postService,commentService))
+        likeService = mock(LikeService.class);
+        mockMvc = MockMvcBuilders.standaloneSetup(new PostController(postService,commentService,likeService))
             .build();
         session = new MockHttpSession();
         user = new User(1,"admin","1234",false);
@@ -59,7 +62,7 @@ public class PostControllerTest {
             .andExpect(status().isOk())
             .andExpect(model().attribute("postViews",postService.viewPosts(0)))
             .andExpect(model().attribute("page",0))
-            .andExpect(model().attribute("maxPage",postService.getMaxPage()))
+            .andExpect(model().attribute("maxPage", 0))
             .andExpect(model().attribute("isAdmin",user.isAdmin()))
             .andDo(print())
             .andExpect(view().name("postView"));
@@ -133,15 +136,21 @@ public class PostControllerTest {
     }
 
     @Test
+    void getPostDelete() throws Exception{
+        doNothing().when(postService).deletePost(0);
+        MvcResult mvcResult = mockMvc.perform(get("/postDelete/{postNum}",0))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(view().name("redirect:/postView/0"))
+            .andReturn();
+    }
+    @Test
     void getPostDeleteListTest() throws Exception{
-        List<PostView> postViewList = new ArrayList<>();
-        when(postService.viewPosts(1)).thenReturn(postViewList);
-        when(postService.getMaxPage()).thenReturn(10);
+
         MvcResult mvcResult = mockMvc.perform(get("/postDeleteList/1"))
             .andExpect(status().isOk())
             .andExpect(model().attribute("postViews", postService.viewPosts(1)))
             .andExpect(model().attribute("page", 1))
-            .andExpect(model().attribute("maxPage", postService.getMaxPage()))
+            .andExpect(model().attribute("maxPage", 0))
             .andDo(print())
             .andExpect(view().name("postDeleteList"))
             .andReturn();
@@ -162,35 +171,27 @@ public class PostControllerTest {
     }
 
     @Test
-    void getCommentModifyTest() throws Exception{
-        Comment comment = new Comment(1,"bomin","comment");
-        when(commentService.getComment(1)).thenReturn(comment);
-        MvcResult mvcResult = mockMvc.perform(get("/commentModify/{commentNum}",1))
+    void getPostLikeListTest() throws Exception{
+        MvcResult mvcResult = mockMvc.perform(get("/postLikeList/{page}",1)
+                .session(session)
+            )
             .andExpect(status().isOk())
-            .andExpect(model().attribute("comment", commentService.getComment(1)))
-            .andExpect(view().name("commentModifyForm"))
-            .andReturn();
-        assertThat(mvcResult.getModelAndView().getModelMap().getAttribute("comment")).isEqualTo(comment);
-    }
-
-    @Test
-    void postCommentModifyTest() throws  Exception{
-        when(commentService.modifyComment(anyLong(), anyString())).thenReturn(1L);
-        MvcResult mvcResult = mockMvc.perform(post("/commentModify/{commentNum}",1)
-                .param("commentContent","ttttt"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(view().name("redirect:/postDetail/1"))
+            .andExpect(view().name("postLikeList"))
             .andReturn();
     }
 
     @Test
-    void getCommentDeleteTest() throws Exception{
-        when(commentService.removeComment(anyLong())).thenReturn(1L);
-        MvcResult mvcResult = mockMvc.perform(get("/commentDelete/{commentNum}",1))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(view().name("redirect:/postDetail/1"))
+    void postSearchTest() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(post("/search/{page}",1)
+                .session(session)
+                .param("title","titles")
+            )
+            .andExpect(status().isOk())
+            .andExpect(view().name("postSearchView"))
             .andReturn();
+
     }
+
 
 
 }

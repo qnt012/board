@@ -20,7 +20,7 @@ public class CommentController {
     }
 
     @PostMapping("/commentInsert/{postNum}")
-    public String postPostModify(@PathVariable long postNum,
+    public String postCommentInsert(@PathVariable long postNum,
                                  @RequestParam String commentContent,
                                  HttpSession session) {
         User user = (User) session.getAttribute("login");

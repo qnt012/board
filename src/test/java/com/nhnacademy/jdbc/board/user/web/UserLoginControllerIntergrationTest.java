@@ -3,68 +3,79 @@ package com.nhnacademy.jdbc.board.user.web;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import com.nhnacademy.jdbc.board.config.RootConfig;
 import com.nhnacademy.jdbc.board.user.domain.User;
 import com.nhnacademy.jdbc.board.user.service.UserService;
-import com.nhnacademy.jdbc.board.user.web.UserLoginController;
 import java.util.Optional;
-import javax.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-public class UserLoginControllerTest {
-    private MockMvc mockMvc;
+@SpringJUnitConfig(RootConfig.class)
+@WebAppConfiguration
+@Rollback
+public class UserLoginControllerIntergrationTest {
+    @Autowired
     private UserService userService;
-    private User user;
-    private MockHttpSession session;
+
+    private MockMvc mockMvc;
+
     @BeforeEach
     void setUp() {
-        userService = mock(UserService.class);
-        user = new User(1,"admin",null,false);
-        session = new MockHttpSession();
-        session.setAttribute("login",user);
         mockMvc = MockMvcBuilders.standaloneSetup(new UserLoginController(userService))
             .build();
     }
 
+    @Test
+    @DisplayName("통합테스트 UserService 주입 상태 정상인지 확인.")
+    void userServiceNonNullTest(){
+        assertThat(userService).isNotNull();
+        assertThat(userService.login("user","1234").get().getUserNum()).isEqualTo(2);
+    }
+
 
     @Test
+    @DisplayName("로그인 성공시 지정된 리다이렉션 여부 확인")
     void userDoLoginTestIsSuccessful() throws Exception {
-        when(userService.login("user01", "1234"))
-            .thenReturn(Optional.of(user));
-
-        mockMvc.perform(post("/login").session(session)
-                .param("id", "user01")
+        MvcResult mvcResult = mockMvc.perform(post("/login")
+                .param("id", "user")
                 .param("pwd", "1234"))
+            .andExpect(handler().handlerType(UserLoginController.class))
+            .andExpect(handler().methodName("postLogin"))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name("redirect:/postView/0"))
             .andReturn();
-
-        assertThat((User)session.getAttribute("login")).isEqualTo(user);
+        assertThat(mvcResult.getRequest().getParameter("id")).isEqualTo("user");
     }
 
-    @Test
-    void userDoLoginTestIsNotSuccessful() throws Exception {
-        when(userService.login(anyString(), anyString()))
-            .thenReturn(Optional.empty());
 
+    @Test
+    @DisplayName("로그인 실패시 지정된 리다이렉션 여부 확인")
+    void userDoLoginTestIsNotSuccessful() throws Exception {
         MvcResult mvcResult = mockMvc.perform(post("/login")
-                .param("id", "userssss")
-                .param("pwd", "12345"))
+                .param("id", "user")
+                .param("pwd", "1333"))
+            .andExpect(handler().handlerType(UserLoginController.class))
+            .andExpect(handler().methodName("postLogin"))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name("redirect:/"))
             .andReturn();
-
-        HttpSession httpSession = mvcResult.getRequest().getSession(false);
-        assertThat(httpSession.getAttribute("login")).isNull();
     }
+
 
 }
