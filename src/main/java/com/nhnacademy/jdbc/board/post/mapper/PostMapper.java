@@ -17,4 +17,5 @@ public interface PostMapper {
     void insertPost(@Param("writerNum") long writerNum, @Param("title") String title, @Param("content") String content);
     void updatePost(@Param("postNum") long postNum, @Param("title") String title, @Param("content") String content, @Param("modifierNum") long modifierNum);
     void updatePostVisibility(@Param("postNum") long postNum, @Param("visibility") boolean visibility);
+    long selectLastInsertId();
 }

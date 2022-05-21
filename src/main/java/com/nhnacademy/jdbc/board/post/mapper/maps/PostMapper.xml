@@ -51,7 +51,6 @@
         limit 20 offset #{offset};
 
     </select>
-
         <insert id="insertPost">
             insert into posts (board_num, writer_num, title, content, write_time)
             values(1, #{writerNum}, '${title}', '${content}', now());
@@ -71,6 +70,9 @@
         select A.post_num
         from comments A
         inner join posts B on B.post_num = A.post_num where comment_num = #{commentNum};
+    </select>
+    <select id="selectLastInsertId" resultType="java.lang.Long">
+        select LAST_INSERT_ID();
     </select>
 
 </mapper>

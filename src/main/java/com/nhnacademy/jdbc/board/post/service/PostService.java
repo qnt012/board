@@ -15,4 +15,5 @@ public interface PostService {
     void modifyPost(long postNum, String title, String content, long modifierNum);
     void deletePost(long postNum);
     void restorePost(long postNum);
+    long getRecentPostNum();
 }

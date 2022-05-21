@@ -61,4 +61,9 @@ public class DefaultPostService implements PostService {
         postMapper.updatePostVisibility(postNum, true);
     }
 
+    @Override
+    public long getRecentPostNum() {
+        return postMapper.selectLastInsertId();
+    }
+
 }
