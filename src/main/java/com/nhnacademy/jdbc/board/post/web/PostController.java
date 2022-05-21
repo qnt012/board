@@ -1,9 +1,13 @@
 package com.nhnacademy.jdbc.board.post.web;
 
+import com.nhnacademy.jdbc.board.like.service.LikeService;
 import com.nhnacademy.jdbc.board.post.domain.Post;
+import com.nhnacademy.jdbc.board.post.domain.PostView;
 import com.nhnacademy.jdbc.board.post.service.CommentService;
 import com.nhnacademy.jdbc.board.post.service.PostService;
 import com.nhnacademy.jdbc.board.user.domain.User;
+
+import java.util.List;
 import java.util.Objects;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -17,20 +21,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PostController {
     private final PostService postService;
     private final CommentService commentService;
+    private final LikeService likeService;
 
     public PostController(PostService postService,
-                          CommentService commentService) {
+                          CommentService commentService,
+                          LikeService likeService) {
         this.postService = postService;
         this.commentService = commentService;
+        this.likeService = likeService;
     }
 
 
     @GetMapping("/postView/{page}")
     public String getPostView(@PathVariable int page, ModelMap modelMap, HttpSession session){
         User user = (User) session.getAttribute("login");
-        modelMap.put("postViews", postService.viewPosts(page));
+        List<PostView> postViews = postService.viewPosts(page);
+        modelMap.put("postViews", postViews);
         modelMap.put("page", page);
-        modelMap.put("maxPage", postService.getMaxPage());
+        modelMap.put("maxPage", postViews.size() / 20);
         modelMap.put("isAdmin", user.isAdmin());
         return "postView";
     }
@@ -57,6 +65,7 @@ public class PostController {
         modelMap.put("comments", commentService.viewComments(postNum));
         modelMap.put("isWriter", Objects.equals(user.getUserId(), post.getWriterId()));
         modelMap.put("isAdmin", user.isAdmin());
+        modelMap.put("isLikePost", likeService.isLikePost(user.getUserNum(), postNum));
         return "postDetailView";
     }
 
@@ -82,20 +91,12 @@ public class PostController {
         return "redirect:/postView/0";
     }
 
-    @PostMapping("/commentInsert/{postNum}")
-    public String postPostModify(@PathVariable long postNum,
-                                 @RequestParam String commentContent,
-                                 HttpSession session) {
-        User user = (User) session.getAttribute("login");
-        commentService.createComment(postNum, user.getUserNum(), commentContent);
-        return "redirect:/postDetail/{postNum}";
-    }
-
     @GetMapping("/postDeleteList/{page}")
     public String getPostDeleteList(@PathVariable int page, ModelMap modelMap){
-        modelMap.put("postViews", postService.viewPosts(page));
+        List<PostView> postViews = postService.viewDeletePosts(page);
+        modelMap.put("postViews", postViews);
         modelMap.put("page", page);
-        modelMap.put("maxPage", postService.getMaxPage());
+        modelMap.put("maxPage", postViews.size() / 20);
         return "postDeleteList";
     }
 
@@ -106,22 +107,25 @@ public class PostController {
         return "redirect:/postDeleteList/0";
     }
 
-    @GetMapping("/commentModify/{commentNum}")
-    public String getCommentModify(@PathVariable long commentNum, ModelMap modelMap) {
-        modelMap.put("comment", commentService.getComment(commentNum));
-        return "commentModifyForm";
+    @GetMapping("/postLikeList/{page}")
+    public String getPostLikeList(@PathVariable int page, ModelMap modelMap, HttpSession session){
+        User user = (User) session.getAttribute("login");
+        List<PostView> postViews = postService.viewLikePosts(user.getUserNum(), page);
+        modelMap.put("postViews", postViews);
+        modelMap.put("page", page);
+        modelMap.put("maxPage", postViews.size() / 20);
+        return "postLikeList";
     }
 
-    @PostMapping("/commentModify/{commentNum}")
-    public String postCommentModify(@PathVariable long commentNum,
-                                   @RequestParam String commentContent) {
-        long postNum = commentService.modifyComment(commentNum, commentContent);
-        return "redirect:/postDetail/"+postNum;
-    }
-
-    @GetMapping("/commentDelete/{commentNum}")
-    public String getCommentDelete(@PathVariable long commentNum) {
-        long postNum = commentService.removeComment(commentNum);
-        return "redirect:/postDetail/"+postNum;
+    @PostMapping("/search/{page}")
+    public String postPostModify(@PathVariable int page,
+                                 @RequestParam String title,
+                                 ModelMap modelMap,
+                                 HttpSession session) {
+        List<PostView> postViews = postService.findPostsByTitle(title, page);
+        modelMap.put("postViews", postViews);
+        modelMap.put("page", page);
+        modelMap.put("maxPage", postViews.size() / 20);
+        return "postSearchView";
     }
 }

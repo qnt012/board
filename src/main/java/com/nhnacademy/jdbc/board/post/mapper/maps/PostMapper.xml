@@ -17,8 +17,40 @@
             select post_num, title, user_id, write_time,
                    (select count(*) from comments C where C.post_num = P.post_num) comment_count,
                    visibility
-            from posts P inner join users on writer_num = user_num limit 20 offset #{offset};
+            from posts P inner join users on writer_num = user_num
+            where visibility
+            limit 20 offset #{offset};
         </select>
+
+        <select id="selectInvisiblePostViews" resultType="com.nhnacademy.jdbc.board.post.domain.PostView">
+            select post_num, title, user_id, write_time,
+                   (select count(*) from comments C where C.post_num = P.post_num) comment_count,
+                   visibility
+            from posts P inner join users on writer_num = user_num
+            where !visibility
+            limit 20 offset #{offset};
+        </select>
+
+        <select id="selectLikePostViews" resultType="com.nhnacademy.jdbc.board.post.domain.PostView">
+            select P.post_num, title, user_id, write_time,
+                   (select count(*) from comments C where C.post_num = P.post_num) comment_count,
+                   visibility
+            from posts P
+                     inner join users U on writer_num = U.user_num
+                     inner join likes L on L.post_num = P.post_num
+            where visibility and L.user_num = #{userNum}
+            limit 20 offset #{offset};
+        </select>
+
+    <select id="selectPostViewsByKeyword" resultType="com.nhnacademy.jdbc.board.post.domain.PostView">
+        select post_num, title, user_id, write_time,
+               (select count(*) from comments C where C.post_num = P.post_num) comment_count,
+               visibility
+        from posts P inner join users on writer_num = user_num
+        where visibility and title like '%${keyword}%'
+        limit 20 offset #{offset};
+
+    </select>
 
         <insert id="insertPost">
             insert into posts (board_num, writer_num, title, content, write_time)
@@ -30,20 +62,6 @@
             where post_num = #{postNum}
         </update>
 
-    <!--    <delete id="deleteById">-->
-    <!--        delete from JdbcUsers where id=#{id}-->
-    <!--    </delete>-->
-
-    <select id="selectPostCount" resultType="int">
-        select count(*)
-        from posts;
-    </select>
-
-<!--    <select id="selectPostComments" resultType="com.nhnacademy.jdbc.board.post.domain.Comment">-->
-<!--        select comment_num, (select user_id from users where user_num = writer_num) writer_id, comment_content-->
-<!--        from comments where post_num = #{postNum};-->
-<!--    </select>-->
-
     <update id="updatePostVisibility">
         update posts set visibility=#{visibility}
         where post_num = #{postNum}
@@ -54,13 +72,5 @@
         from comments A
         inner join posts B on B.post_num = A.post_num where comment_num = #{commentNum};
     </select>
-
-
-
-<!--    <insert id="insertComment">-->
-<!--        insert into comments (post_num, writer_num, comment_content)-->
-<!--        values(#{postNum}, #{writerNum}, '${commentContent}');-->
-<!--    </insert>-->
-
 
 </mapper>

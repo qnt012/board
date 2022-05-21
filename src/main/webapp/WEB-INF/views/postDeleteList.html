@@ -14,7 +14,7 @@
         <th>작성일시</th>
         <th>댓글개수</th>
     </tr>
-    <tr th:each="postView : ${postViews}" th:unless="${postView.visibility}">
+    <tr th:each="postView : ${postViews}">
         <td th:text="${postView.postNum}"></td>
         <td><a th:href="@{|/postDetail/${postView.postNum}|}" th:text="${postView.title}"></a></td>
         <td th:text="${postView.writerId}"></td>
@@ -22,5 +22,7 @@
         <td th:text="${postView.commentCount}"></td>
     </tr>
 </table>
+<a th:href="@{|/postDeleteList/${page - 1}|}" th:if="${page} > 0">이전</a>
+<a th:href="@{|/postDeleteList/${page + 1}|}" th:if="${page} < ${maxPage}">다음</a>
 </body>
 </html>

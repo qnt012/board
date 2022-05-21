@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nhnacademy.jdbc.board.like.mapper.LikeMapper">
+    <select id="selectLike" resultType="com.nhnacademy.jdbc.board.like.domain.Like">
+        select * from likes where user_num = #{userNum} and post_num = #{postNum}
+    </select>
+    <insert id="insertLike">
+        insert into likes (user_num, post_num)
+        values(#{userNum}, #{postNum});
+    </insert>
+    <delete id="deleteLike">
+        delete from likes where user_num = #{userNum} and post_num = #{postNum}
+    </delete>
+</mapper>

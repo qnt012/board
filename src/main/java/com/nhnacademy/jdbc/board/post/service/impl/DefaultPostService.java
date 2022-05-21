@@ -1,6 +1,5 @@
 package com.nhnacademy.jdbc.board.post.service.impl;
 
-import com.nhnacademy.jdbc.board.post.domain.Comment;
 import com.nhnacademy.jdbc.board.post.domain.Post;
 import com.nhnacademy.jdbc.board.post.domain.PostView;
 import com.nhnacademy.jdbc.board.post.mapper.PostMapper;
@@ -28,6 +27,21 @@ public class DefaultPostService implements PostService {
     }
 
     @Override
+    public List<PostView> viewDeletePosts(int page) {
+        return postMapper.selectInvisiblePostViews(20 * page);
+    }
+
+    @Override
+    public List<PostView> viewLikePosts(long userNum, int page) {
+        return postMapper.selectLikePostViews(userNum, page);
+    }
+
+    @Override
+    public List<PostView> findPostsByTitle(String keyword, int page) {
+        return postMapper.selectPostViewsByKeyword(keyword, page);
+    }
+
+    @Override
     public void createPost(long writerNum, String title, String content) {
         postMapper.insertPost(writerNum, title, content);
     }
@@ -38,34 +52,13 @@ public class DefaultPostService implements PostService {
     }
 
     @Override
-    public int getMaxPage() {
-        return postMapper.selectPostCount() / 20;
-    }
-
-//    @Override
-//    public List<Comment> viewComments(long postNum) {
-//        return postMapper.selectPostComments(postNum);
-//    }
-
-    @Override
     public void deletePost(long postNum) {
         postMapper.updatePostVisibility(postNum, false);
     }
-
-//    @Override
-//    public void createComment(long postNum, long writerNum, String commentContent) {
-//        .insertComment(postNum, writerNum, commentContent);
-//    }
 
     @Override
     public void restorePost(long postNum) {
         postMapper.updatePostVisibility(postNum, true);
     }
-
-//    @Override
-//    public Comment getComment(long commentNum) {
-//        return postMapper.selectComment(commentNum);
-//    }
-
 
 }
