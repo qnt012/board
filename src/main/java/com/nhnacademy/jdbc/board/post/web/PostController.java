@@ -47,7 +47,7 @@ public class PostController {
         List<PostView> postViews = postService.viewPosts(page);
         modelMap.put("postViews", postViews);
         modelMap.put("page", page);
-        modelMap.put("maxPage", postViews.size() / 20);
+        modelMap.put("maxPage", postViews.size() / 20 + page);
         modelMap.put("isAdmin", user.isAdmin());
         return "postView";
     }
@@ -120,7 +120,7 @@ public class PostController {
         List<PostView> postViews = postService.viewDeletePosts(page);
         modelMap.put("postViews", postViews);
         modelMap.put("page", page);
-        modelMap.put("maxPage", postViews.size() / 20);
+        modelMap.put("maxPage", postViews.size() / 20 + page);
         return "postDeleteList";
     }
 
@@ -137,7 +137,7 @@ public class PostController {
         List<PostView> postViews = postService.viewLikePosts(user.getUserNum(), page);
         modelMap.put("postViews", postViews);
         modelMap.put("page", page);
-        modelMap.put("maxPage", postViews.size() / 20);
+        modelMap.put("maxPage", postViews.size() / 20 + page);
         return "postLikeList";
     }
 
@@ -148,7 +148,7 @@ public class PostController {
         List<PostView> postViews = postService.findPostsByTitle(title, page);
         modelMap.put("postViews", postViews);
         modelMap.put("page", page);
-        modelMap.put("maxPage", postViews.size() / 20);
+        modelMap.put("maxPage", postViews.size() / 20 + page);
         return "postSearchView";
     }
 }

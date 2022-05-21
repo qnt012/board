@@ -9,7 +9,7 @@ import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration;
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-    private static int MAX_FILE_ZIZE = 10 * 1024 * 1024;
+    private static int MAX_FILE_SIZE = 10 * 1024 * 1024;
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
@@ -38,7 +38,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
-        MultipartConfigElement multipartConfig = new MultipartConfigElement("", MAX_FILE_ZIZE, MAX_FILE_ZIZE, 0);
+        MultipartConfigElement multipartConfig = new MultipartConfigElement("", MAX_FILE_SIZE, MAX_FILE_SIZE, 0);
         registration.setMultipartConfig(multipartConfig);
     }
 }
