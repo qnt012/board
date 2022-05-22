@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.nhnacademy.jdbc.board.config.RootConfig;
+import com.nhnacademy.jdbc.board.file.service.FileService;
 import com.nhnacademy.jdbc.board.like.service.LikeService;
 import com.nhnacademy.jdbc.board.post.domain.Post;
 import com.nhnacademy.jdbc.board.post.domain.PostView;
@@ -43,6 +44,8 @@ public class PostControllerIntergrationTest {
     @Autowired
     private CommentService commentService;
     @Autowired
+    private FileService fileService;
+    @Autowired
     private LikeService likeService;
     private MockHttpSession mockHttpSession;
     private User user;
@@ -53,7 +56,7 @@ public class PostControllerIntergrationTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new PostController(postService, commentService, likeService))
+        mockMvc = MockMvcBuilders.standaloneSetup(new PostController(postService, commentService, likeService, fileService))
             .build();
         mockHttpSession = new MockHttpSession();
         id = "user";

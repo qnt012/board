@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import com.nhnacademy.jdbc.board.file.service.FileService;
 import com.nhnacademy.jdbc.board.like.service.LikeService;
 import com.nhnacademy.jdbc.board.post.domain.Comment;
 import com.nhnacademy.jdbc.board.post.domain.Post;
@@ -38,6 +39,7 @@ public class PostControllerTest {
     private PostService postService;
     private CommentService commentService;
     private LikeService likeService;
+    private FileService fileService;
     private User user;
     private Post post;
     private MockHttpSession session;
@@ -47,7 +49,7 @@ public class PostControllerTest {
         postService = mock(PostService.class);
         commentService = mock(CommentService.class);
         likeService = mock(LikeService.class);
-        mockMvc = MockMvcBuilders.standaloneSetup(new PostController(postService,commentService,likeService))
+        mockMvc = MockMvcBuilders.standaloneSetup(new PostController(postService,commentService,likeService,fileService))
             .build();
         session = new MockHttpSession();
         user = new User(1,"admin","1234",false);

@@ -11,6 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -83,8 +85,12 @@ public class WebConfig implements WebMvcConfigurer, ApplicationContextAware, Mes
         registry.addInterceptor(new LocaleChangeInterceptor());
         registry.addInterceptor(new LoginCheckInterceptor())
                 .addPathPatterns("/**")
-                //HTTP Request 테스트를 위해 '/students' 예외패턴에 추가
                 .excludePathPatterns("/", "/login");
     }
 
+    @Bean
+    public MultipartResolver multipartResolver() {
+        StandardServletMultipartResolver multipartResolver = new StandardServletMultipartResolver();
+        return multipartResolver;
+    }
 }

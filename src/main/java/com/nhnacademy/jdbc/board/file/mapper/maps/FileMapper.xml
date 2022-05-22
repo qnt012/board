@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nhnacademy.jdbc.board.file.mapper.FileMapper">
+    <insert id="insertFile">
+        insert into files(post_num, file_name) values(#{postNum}, '${fileName}')
+    </insert>
+    <select id="selectFileName" resultType="java.lang.String">
+        select file_name from files where post_num = #{postNum}
+    </select>
+</mapper>
