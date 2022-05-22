@@ -11,7 +11,7 @@
     <a th:href="@{|/postDelete/${post.postNum}|}" th:if="${isWriter || isAdmin}" >삭제</a>
     <a th:href="@{|/likeChange/${post.postNum}|}" th:if="${isLikePost}">좋아요 취소</a>
     <a th:href="@{|/likeChange/${post.postNum}|}" th:unless="${isLikePost}">좋아요</a><br/>
-    <a th:href="@{|/fileDownload/${fileName}|}" th:if="${fileName != null}" th:text="파일${fileName}"></a>
+    <a th:href="@{|/fileDownload/${fileName}|}" th:if="${fileName != null}" th:text="${fileName}"></a>
 </div>
 <div th:unless="${post.visibility}">
     <a href="/postDeleteList/0">삭제목록으로</a><br/>
