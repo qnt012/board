@@ -49,6 +49,7 @@ public class PostControllerTest {
         postService = mock(PostService.class);
         commentService = mock(CommentService.class);
         likeService = mock(LikeService.class);
+        fileService = mock(FileService.class);
         mockMvc = MockMvcBuilders.standaloneSetup(new PostController(postService,commentService,likeService,fileService))
             .build();
         session = new MockHttpSession();

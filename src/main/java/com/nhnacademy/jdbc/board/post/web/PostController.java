@@ -64,7 +64,8 @@ public class PostController {
                                  HttpSession session) throws IOException {
         User user = (User) session.getAttribute("login");
         postService.createPost(user.getUserNum(), title, content);
-        if (!file.isEmpty()) {
+
+        if (!Objects.equals(file,null)) {
             ServletContext context = session.getServletContext();
             String path = context.getRealPath("");
             String filename = file.getOriginalFilename();

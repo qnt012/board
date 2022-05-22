@@ -19,7 +19,11 @@ import com.nhnacademy.jdbc.board.post.service.CommentService;
 import com.nhnacademy.jdbc.board.post.service.PostService;
 import com.nhnacademy.jdbc.board.user.domain.User;
 import com.nhnacademy.jdbc.board.user.service.UserService;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -44,25 +48,28 @@ public class PostControllerIntergrationTest {
     @Autowired
     private CommentService commentService;
     @Autowired
-    private FileService fileService;
-    @Autowired
     private LikeService likeService;
+    @Autowired
+    private FileService fileService;
     private MockHttpSession mockHttpSession;
     private User user;
     private Post post;
+    private File file;
     private MockMvc mockMvc;
     private String id;
     private String pwd;
 
     @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new PostController(postService, commentService, likeService, fileService))
+    void setUp() throws IOException {
+        mockMvc = MockMvcBuilders.standaloneSetup(new PostController(postService, commentService, likeService,fileService))
             .build();
         mockHttpSession = new MockHttpSession();
         id = "user";
         pwd = "1234";
         Optional<User> user = userService.login(id, pwd);
         mockHttpSession.setAttribute("login", user.get().getUserAuthInfo());
+        file = new File("E:\\file.txt");
+        file.createNewFile();
     }
 
     @Test
@@ -75,13 +82,13 @@ public class PostControllerIntergrationTest {
             .andExpect(status().isOk())
             .andExpect(model().attribute("postViews",postViews))
             .andExpect(model().attribute("page",page))
-            .andExpect(model().attribute("maxPage", postViews.size() / 20))
+            .andExpect(model().attribute("maxPage", postViews.size() / 20 + page))
             .andExpect(model().attribute("isAdmin",user.isAdmin()))
             .andDo(print())
             .andExpect(view().name("postView"))
             .andReturn();
 
-         assertThat(mvcResult.getRequest().getSession()).isNotNull();
+        assertThat(mvcResult.getRequest().getSession()).isNotNull();
     }
 
     @Test
@@ -110,8 +117,10 @@ public class PostControllerIntergrationTest {
         mockMvc.perform(get("/postDetail/{postNum}",1).session(mockHttpSession))
             .andExpect(model().attribute("post",post))
             .andExpect(model().attribute("comments",commentService.viewComments(1)))
+            .andExpect(model().attribute("isWriter", Objects.equals(user.getUserId(),post.getWriterId())))
             .andExpect(model().attribute("isAdmin", user.isAdmin()))
             .andExpect(model().attribute("isLikePost",likeService.isLikePost(user.getUserNum(), 1)))
+            .andExpect(model().attribute("fileName",fileService.getFileName(post.getPostNum())))
             .andExpect(status().isOk())
             .andExpect(view().name("postDetailView"));
     }
@@ -143,13 +152,51 @@ public class PostControllerIntergrationTest {
     @Test
     @DisplayName("GET 요청을 통한 게시글 삭제 테스트")
     void getPostDelete() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/postDelete/{postNum}",2).session(mockHttpSession))
-            .andExpect(status().isOk())
+        MvcResult mvcResult = mockMvc.perform(get("/postDelete/{postNum}",3)
+                .param("postNum","3"))
+            .andExpect(status().is3xxRedirection())
             .andExpect(view().name("redirect:/postView/0"))
             .andReturn();
+    }
 
-        assertThat(mvcResult.getRequest().getAttribute("post")).isEqualTo(postService.getPost(2));
 
+    @Test
+    @DisplayName("GET 요청을 통한 postDeleteList 테스트")
+    void getPostDeleteList() throws Exception {
+        int page = 1;
+        List<PostView> postViews = postService.viewDeletePosts(page);
+        MvcResult mvcResult = mockMvc.perform(get("/postDeleteList/{page}",1))
+            .andExpect(model().attribute("postViews",postViews))
+            .andExpect(model().attribute("page",page))
+            .andExpect(model().attribute("maxPage",postViews.size() / 20 + page))
+            .andExpect(status().isOk())
+            .andExpect(view().name("postDeleteList"))
+            .andReturn();
+    }
+
+
+    @Test
+    @DisplayName("GET 요청을 통한 게시물 복원 테스트")
+    void getPostRestore() throws Exception {
+        mockMvc.perform(get("/postRestore/{postNum}",1))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(view().name("redirect:/postDeleteList/0"))
+            .andReturn();
+    }
+
+
+    @Test
+    @DisplayName("GET 요청을 통한 게시물 좋아요 리스트 테스트")
+    void getPostLikeList() throws Exception {
+        int page = 1;
+        List<PostView> postViews = postService.viewLikePosts(user.getUserNum(), page);
+        mockMvc.perform(get("/postRestore/{postNum}",1).session(mockHttpSession))
+            .andExpect(model().attribute("postViews",postViews))
+            .andExpect(model().attribute("page",page))
+            .andExpect(model().attribute("maxPage", postViews.size() / 20 + page))
+            .andExpect(status().isOk())
+            .andExpect(view().name("postLikeList"))
+            .andReturn();
     }
 
 
