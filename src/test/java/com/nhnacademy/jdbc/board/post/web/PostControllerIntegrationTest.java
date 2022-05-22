@@ -40,7 +40,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @SpringJUnitConfig(RootConfig.class)
 @WebAppConfiguration
 @Rollback
-public class PostControllerIntergrationTest {
+public class PostControllerIntegrationTest {
     @Autowired
     private UserService userService;
     @Autowired
@@ -116,7 +116,6 @@ public class PostControllerIntergrationTest {
         post = postService.getPost(1);
         mockMvc.perform(get("/postDetail/{postNum}",1).session(mockHttpSession))
             .andExpect(model().attribute("post",post))
-            .andExpect(model().attribute("comments",commentService.viewComments(1)))
             .andExpect(model().attribute("isWriter", Objects.equals(user.getUserId(),post.getWriterId())))
             .andExpect(model().attribute("isAdmin", user.isAdmin()))
             .andExpect(model().attribute("isLikePost",likeService.isLikePost(user.getUserNum(), 1)))
@@ -188,35 +187,31 @@ public class PostControllerIntergrationTest {
     @Test
     @DisplayName("GET 요청을 통한 게시물 좋아요 리스트 테스트")
     void getPostLikeList() throws Exception {
+        user = (User) mockHttpSession.getAttribute("login");
         int page = 1;
         List<PostView> postViews = postService.viewLikePosts(user.getUserNum(), page);
-        mockMvc.perform(get("/postRestore/{postNum}",1).session(mockHttpSession))
+        mockMvc.perform(get("/postLikeList/{page}",1).session(mockHttpSession))
             .andExpect(model().attribute("postViews",postViews))
             .andExpect(model().attribute("page",page))
             .andExpect(model().attribute("maxPage", postViews.size() / 20 + page))
             .andExpect(status().isOk())
-            .andExpect(view().name("postLikeList"))
-            .andReturn();
+            .andExpect(view().name("postLikeList"));
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Test
+    @DisplayName("POST 요청을 통한 게시물 검색 테스트")
+    void postSearch() throws Exception {
+        user = (User) mockHttpSession.getAttribute("login");
+        int page = 1;
+        List<PostView> postViews = postService.findPostsByTitle("Hello Titles",1);
+        mockMvc.perform(post("/search/{page}",page)
+                .param("title", "Hello Titles"))
+            .andExpect(model().attribute("postViews",postViews))
+            .andExpect(model().attribute("page",page))
+            .andExpect(model().attribute("maxPage", postViews.size() / 20 + page))
+            .andExpect(status().isOk())
+            .andExpect(view().name("postSearchView"));
+    }
 
 
 

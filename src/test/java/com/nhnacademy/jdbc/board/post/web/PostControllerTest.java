@@ -153,7 +153,7 @@ public class PostControllerTest {
             .andExpect(status().isOk())
             .andExpect(model().attribute("postViews", postService.viewPosts(1)))
             .andExpect(model().attribute("page", 1))
-            .andExpect(model().attribute("maxPage", 0))
+            .andExpect(model().attribute("maxPage", 1))
             .andDo(print())
             .andExpect(view().name("postDeleteList"))
             .andReturn();

@@ -29,7 +29,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @SpringJUnitConfig(RootConfig.class)
 @WebAppConfiguration
 @Rollback
-public class UserLoginControllerIntergrationTest {
+public class UserLoginControllerIntegrationTest {
     @Autowired
     private UserService userService;
 

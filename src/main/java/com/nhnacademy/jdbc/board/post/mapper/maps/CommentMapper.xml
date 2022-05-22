@@ -10,7 +10,7 @@
     </select>
 
 
-    <select id="selectPostNum" resultType="int">
+    <select id="selectPostNum" resultType="long">
         select A.post_num
         from comments A
         inner join posts B on B.post_num = A.post_num where comment_num = #{commentNum};

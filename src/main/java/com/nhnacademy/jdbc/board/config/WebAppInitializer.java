@@ -46,9 +46,8 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         characterEncodingFilter.setForceEncoding(true);
         HiddenHttpMethodFilter hiddenHttpMethodFilter = new HiddenHttpMethodFilter();
         MultipartFilter multipartFilter =new MultipartFilter();
-        XssEscapeServletFilter xssEscapeServletFilter = new XssEscapeServletFilter();
 
-        return new Filter[]{characterEncodingFilter, hiddenHttpMethodFilter, multipartFilter, xssEscapeServletFilter};
+        return new Filter[]{characterEncodingFilter, hiddenHttpMethodFilter, multipartFilter};
     }
 
     @Override

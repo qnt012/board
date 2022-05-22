@@ -14,5 +14,5 @@ public interface CommentMapper {
     void insertComment(@Param("postNum") long postNum, @Param("writerNum") long writerNum, @Param("commentContent") String commentContent);
     void updateComment(@Param("commentNum") long commentNum, @Param("commentContent") String commentContent);
     void deleteComment(long commentNum);
-    int selectPostNum(long commentNum);
+    long selectPostNum(long commentNum);
 }
