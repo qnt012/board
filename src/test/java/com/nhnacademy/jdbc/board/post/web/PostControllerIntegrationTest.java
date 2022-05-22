@@ -19,12 +19,19 @@ import com.nhnacademy.jdbc.board.post.service.CommentService;
 import com.nhnacademy.jdbc.board.post.service.PostService;
 import com.nhnacademy.jdbc.board.user.domain.User;
 import com.nhnacademy.jdbc.board.user.service.UserService;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.apache.commons.codec.binary.Base64;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,6 +65,7 @@ public class PostControllerIntegrationTest {
     private MockMvc mockMvc;
     private String id;
     private String pwd;
+    private String fileString;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -70,6 +78,9 @@ public class PostControllerIntegrationTest {
         mockHttpSession.setAttribute("login", user.get().getUserAuthInfo());
         file = new File("E:\\file.txt");
         file.createNewFile();
+        fileString = fileToString(file);
+
+
     }
 
     @Test
@@ -107,6 +118,18 @@ public class PostControllerIntegrationTest {
                 .param("content","any content"))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name("redirect:/postView/0"));
+    }
+
+    @Test
+    @DisplayName("Post 요청을 통해 파일 전송 확인 테스트")
+    void postPostIncludeFileInsert() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(post("/postInsert").session(mockHttpSession)
+                .param("title","Hello Titles")
+                .param("content","any content")
+                .param("file",fileString))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(view().name("redirect:/postView/0"))
+            .andReturn();
     }
 
     @Test
@@ -212,7 +235,27 @@ public class PostControllerIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(view().name("postSearchView"));
     }
-
-
+    public String fileToString(File file) throws IOException {
+        String fileString = new String();
+        FileInputStream inputStream =  null;
+        ByteArrayOutputStream byteOutStream = null;
+        try {
+            inputStream = new FileInputStream(file);
+            byteOutStream = new ByteArrayOutputStream();
+            int len = 0;
+            byte[] buf = new byte[1024];
+            while ((len = inputStream.read(buf)) != -1) {
+                byteOutStream.write(buf, 0, len);
+            }
+            byte[] fileArray = byteOutStream.toByteArray();
+            fileString = new String(Base64.encodeBase64(fileArray));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            inputStream.close();
+            byteOutStream.close();
+        }
+        return fileString;
+    }
 
 }
