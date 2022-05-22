@@ -1,7 +1,10 @@
 package com.nhnacademy.jdbc.board.post.web;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,6 +29,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @SpringJUnitConfig(RootConfig.class)
@@ -64,13 +68,106 @@ public class PostControllerIntergrationTest {
         int page = 1;
         List<PostView> postViews = postService.viewPosts(page);
         user = (User) mockHttpSession.getAttribute("login");
-        mockMvc.perform(get("/postView/{page}",page).session(mockHttpSession))
+        MvcResult mvcResult = mockMvc.perform(get("/postView/{page}",page).session(mockHttpSession))
             .andExpect(status().isOk())
             .andExpect(model().attribute("postViews",postViews))
             .andExpect(model().attribute("page",page))
             .andExpect(model().attribute("maxPage", postViews.size() / 20))
             .andExpect(model().attribute("isAdmin",user.isAdmin()))
             .andDo(print())
-            .andExpect(view().name("postView"));
+            .andExpect(view().name("postView"))
+            .andReturn();
+
+         assertThat(mvcResult.getRequest().getSession()).isNotNull();
     }
+
+    @Test
+    @DisplayName("GET 요청을 통한 Post Insert 주소 Test")
+    void getPostInsert() throws Exception {
+        mockMvc.perform(get("/postInsert"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("postInsertForm"));
+    }
+
+    @Test
+    @DisplayName("Post 요청을 통한 Post Insert 주소 Redirection Test")
+    void postPostInsert() throws Exception {
+        mockMvc.perform(post("/postInsert").session(mockHttpSession)
+                .param("title","Hello Titles")
+                .param("content","any content"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(view().name("redirect:/postView/0"));
+    }
+
+    @Test
+    @DisplayName("GET 요청을 통한 게시글 확인")
+    void getPostDetailTest() throws Exception {
+        user = (User) mockHttpSession.getAttribute("login");
+        post = postService.getPost(1);
+        mockMvc.perform(get("/postDetail/{postNum}",1).session(mockHttpSession))
+            .andExpect(model().attribute("post",post))
+            .andExpect(model().attribute("comments",commentService.viewComments(1)))
+            .andExpect(model().attribute("isAdmin", user.isAdmin()))
+            .andExpect(model().attribute("isLikePost",likeService.isLikePost(user.getUserNum(), 1)))
+            .andExpect(status().isOk())
+            .andExpect(view().name("postDetailView"));
+    }
+
+
+    @Test
+    @DisplayName("GET 요청을 통한 게시글 수정 테스트")
+    void getPostModifyTest() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/postModify/{postNum}",2).session(mockHttpSession))
+            .andExpect(model().attribute("post",postService.getPost(2)))
+            .andExpect(status().isOk())
+            .andExpect(view().name("postModifyForm"))
+            .andReturn();
+
+        assertThat(mvcResult.getRequest().getAttribute("post")).isEqualTo(postService.getPost(2));
+
+    }
+
+    @Test
+    @DisplayName("Post 요청을 통한 PostModify 게시글 수정 요청")
+    void postPostModify() throws Exception {
+        mockMvc.perform(post("/postModify/{postNum}",1).session(mockHttpSession)
+                .param("title","Hello Titles")
+                .param("content","any content"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(view().name("redirect:/postView/0"));
+    }
+
+    @Test
+    @DisplayName("GET 요청을 통한 게시글 삭제 테스트")
+    void getPostDelete() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/postDelete/{postNum}",2).session(mockHttpSession))
+            .andExpect(status().isOk())
+            .andExpect(view().name("redirect:/postView/0"))
+            .andReturn();
+
+        assertThat(mvcResult.getRequest().getAttribute("post")).isEqualTo(postService.getPost(2));
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

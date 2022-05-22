@@ -60,6 +60,7 @@ public class UserLoginControllerIntergrationTest {
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name("redirect:/postView/0"))
             .andReturn();
+        assertThat(mvcResult.getRequest().getSession()).isNotNull();
         assertThat(mvcResult.getRequest().getParameter("id")).isEqualTo("user");
     }
 

@@ -189,7 +189,6 @@ public class PostControllerTest {
             .andExpect(status().isOk())
             .andExpect(view().name("postSearchView"))
             .andReturn();
-
     }
 
 
